@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { CheckCircle2, Plus, RotateCw, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -329,7 +329,7 @@ export function TopicsStep({
   retry,
 }: {
   topics: DraftTopic[];
-  setTopics: React.Dispatch<React.SetStateAction<DraftTopic[]>>;
+  setTopics: Dispatch<SetStateAction<DraftTopic[]>>;
   suggestions: Suggestion[] | null;
   loading: boolean;
   error: boolean;
