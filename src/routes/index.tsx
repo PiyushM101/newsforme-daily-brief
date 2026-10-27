@@ -24,7 +24,7 @@ const steps = [
 
 const faqs = [
   { q: "Is it free?", a: "Yes. NewsForMe is free to use." },
-  { q: "How do I stop it?", a: "Every email has a pause link. You can also pause or change it in settings at any time." },
+  { q: "How do I stop it?", a: "Every email has a one-click unsubscribe link at the bottom. You can also pause in settings." },
   {
     q: "Where does the news come from?",
     a: "From the sources you choose, plus Reuters and AP. We read the latest stories and write a short summary for you.",
