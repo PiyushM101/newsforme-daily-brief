@@ -14,6 +14,16 @@ import { supabase } from "@/lib/supabase";
 import { fetchSuggestions, newKey, replaceTopicsAndSources, type DraftTopic, type Suggestion } from "@/lib/api";
 import { MAX_TOPICS, friendlyError } from "@/lib/domain";
 import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/settings")({
   ssr: false,
@@ -131,6 +141,21 @@ function Settings() {
     await supabase.auth.signOut();
     navigate({ to: "/login", replace: true });
   }
+  const [confirmText, setConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  async function deleteAccount() {
+    setDeleting(true);
+    try {
+      const { error } = await supabase.rpc("delete_my_account");
+      if (error) throw error;
+      await supabase.auth.signOut();
+      toast.success("Your account and data are deleted.");
+      navigate({ to: "/", replace: true });
+    } catch (e) {
+      toast.error(friendlyError(e));
+      setDeleting(false);
+    }
+  }
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-12"><LoadingNote text="Loading your settings..." /></div>;
   if (loadError) return (
@@ -238,6 +263,42 @@ function Settings() {
             ))}
           </ul>
         )}
+      </section>
+
+      <section className="rounded-lg border border-destructive/40 bg-card p-5 sm:p-6">
+        <h2 className="text-2xl font-semibold">Delete account</h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          This removes your account, profile, topics, sources, and email history right away. It cannot be undone.
+        </p>
+        <AlertDialog onOpenChange={(open) => { if (!open) setConfirmText(""); }}>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" className="mt-4 border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive">
+              Delete my account
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Your briefs stop and all your data is deleted. You can sign up again later, but you will start from scratch.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-delete">Type DELETE to confirm</Label>
+              <Input id="confirm-delete" autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+              <Button
+                variant="destructive"
+                disabled={confirmText.trim().toUpperCase() !== "DELETE" || deleting}
+                onClick={deleteAccount}
+              >
+                {deleting ? "Deleting..." : "Delete forever"}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </section>
     </div>
   );

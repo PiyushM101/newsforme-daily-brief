@@ -99,11 +99,9 @@ function Privacy() {
             settings at any time.
           </li>
           <li>
-            <strong>Delete everything:</strong> email{" "}
-            <a href={`mailto:${CONTACT}?subject=Delete%20my%20NewsForMe%20account`} className="underline hover:text-primary">
-              {CONTACT}
-            </a>{" "}
-            from your sign-in address. We will delete your account and all your data within 30 days.
+            <strong>Delete everything:</strong> use "Delete my account" at the bottom of{" "}
+            <Link to="/settings" className="underline hover:text-primary">settings</Link>. It removes your
+            account and all your data from our database right away.
           </li>
           <li>
             <strong>Get a copy:</strong> email us and we will send you the data we hold about you.
@@ -113,9 +111,9 @@ function Privacy() {
 
       <Section title="How long we keep it">
         <p>
-          We keep your account until you ask us to delete it. Links from past briefs are deleted
-          after 45 days. If you unsubscribe, we keep your settings so you can turn emails back on.
-          Ask us anytime if you want them gone too.
+          We keep your account until you delete it. Links from past briefs are deleted after 45
+          days. If you unsubscribe, we keep your settings so you can turn emails back on. Delete your
+          account in settings if you want them gone too.
         </p>
       </Section>
 
