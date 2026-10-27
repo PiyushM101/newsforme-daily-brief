@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
@@ -16,13 +16,13 @@ export const Route = createFileRoute("/unsubscribe")({
   component: Unsubscribe,
 });
 
-type State = "working" | "off" | "on" | "bad" | "error";
+type State = "ask" | "off" | "on" | "bad" | "error";
 
 const isToken = (t?: string) => !!t && /^[0-9a-f-]{36}$/i.test(t);
 
 function Unsubscribe() {
   const { t } = Route.useSearch();
-  const [state, setState] = useState<State>(isToken(t) ? "working" : "bad");
+  const [state, setState] = useState<State>(isToken(t) ? "ask" : "bad");
   const [hint, setHint] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -42,14 +42,19 @@ function Unsubscribe() {
     }
   }
 
-  useEffect(() => {
-    if (isToken(t)) call("unsubscribe_by_token", "off");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t]);
-
   return (
     <div className="mx-auto max-w-md px-5 py-20 text-center">
-      {state === "working" && <p className="text-muted-foreground">Unsubscribing you...</p>}
+      {state === "ask" && (
+        <>
+          <h1 className="text-4xl font-semibold">Stop your daily brief?</h1>
+          <p className="mt-4 text-muted-foreground">
+            You will stop getting NewsForMe emails. Your topics and sources stay saved.
+          </p>
+          <Button className="mt-8" size="lg" disabled={busy} onClick={() => call("unsubscribe_by_token", "off")}>
+            {busy ? "One moment..." : "Unsubscribe"}
+          </Button>
+        </>
+      )}
 
       {state === "off" && (
         <>
