@@ -50,49 +50,19 @@ export async function sendDemo(): Promise<boolean> {
   }
 }
 
-/** Replace all topics and sources: delete sources, delete topics, insert topics, insert sources. */
+/** Replace all topics and sources in one database transaction. */
 export async function replaceTopicsAndSources(
-  userId: string,
+  _userId: string,
   topics: DraftTopic[],
   globalSources: string[],
 ) {
-  const d1 = await supabase.from("sources").delete().eq("user_id", userId);
-  if (d1.error) throw d1.error;
-  const d2 = await supabase.from("topics").delete().eq("user_id", userId);
-  if (d2.error) throw d2.error;
-
-  let inserted: { id: string; position: number }[] = [];
-  if (topics.length) {
-    const r = await supabase
-      .from("topics")
-      .insert(
-        topics.map((t, i) => ({
-          user_id: userId,
-          name: t.name.trim().slice(0, 80),
-          description: t.description.trim().slice(0, 400) || null,
-          position: i,
-        })),
-      )
-      .select("id, position");
-    if (r.error) throw r.error;
-    inserted = r.data ?? [];
-  }
-
-  const rows: { user_id: string; topic_id: string | null; domain: string }[] = [];
-  const seen = new Set<string>();
-  const push = (topic_id: string | null, domain: string) => {
-    const k = `${topic_id}|${domain}`;
-    if (seen.has(k)) return;
-    seen.add(k);
-    rows.push({ user_id: userId, topic_id, domain });
-  };
-  topics.forEach((t, i) => {
-    const id = inserted.find((x) => x.position === i)?.id;
-    if (id) t.sources.forEach((s) => push(id, s));
+  const { error } = await supabase.rpc("save_topics_and_sources", {
+    p_topics: topics.map((t) => ({
+      name: t.name.trim().slice(0, 80),
+      description: t.description.trim().slice(0, 400),
+      sources: t.sources,
+    })),
+    p_general: globalSources,
   });
-  globalSources.forEach((s) => push(null, s));
-  if (rows.length) {
-    const r = await supabase.from("sources").insert(rows);
-    if (r.error) throw r.error;
-  }
+  if (error) throw error;
 }

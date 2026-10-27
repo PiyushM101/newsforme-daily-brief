@@ -1,5 +1,5 @@
 export const MAX_TOPICS = 5;
-export const MAX_SOURCES = 40;
+export const MAX_SOURCES = 80;
 export const MIN_ABOUT = 30;
 
 /** Turn whatever the user typed into a bare lowercase domain, or null if it is not one. */
@@ -25,8 +25,8 @@ export function friendlyError(err: unknown): string {
   const m = msg.toLowerCase();
   if (m.includes("5 topic") || (m.includes("topic") && (m.includes("limit") || m.includes("max"))))
     return "You can have up to 5 topics.";
-  if (m.includes("40") || (m.includes("source") && (m.includes("limit") || m.includes("max"))))
-    return "You can have up to 40 sources.";
+  if (m.includes("80") || (m.includes("source") && (m.includes("limit") || m.includes("max"))))
+    return "You have too many sources. Remove a few and try again.";
   if (m.includes("duplicate") || m.includes("unique")) return "That source is already on the list.";
   if (m.includes("rate limit") || m.includes("too many")) return "Too many tries. Please wait a minute.";
   if (m.includes("failed to fetch") || m.includes("network")) return "We could not reach the server. Check your connection.";
