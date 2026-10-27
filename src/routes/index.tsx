@@ -45,7 +45,7 @@ function Landing() {
           </p>
           <div className="mt-8 max-w-lg">
             <MagicLinkForm cta="Get started" />
-            <p className="mt-2 text-xs text-muted-foreground">We will email you a link. No password.</p>
+            <p className="mt-2 text-xs text-muted-foreground">We will email you a code. No password.</p>
           </div>
         </div>
         <SampleEmail />

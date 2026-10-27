@@ -109,7 +109,7 @@ function Settings() {
     if (error) toast.error(friendlyError(error)); else toast.success("Saved.");
   }
   async function saveTopics(label: string) {
-    if (topics.some((t) => !t.name.trim())) return toast.error("Every topic needs a name.");
+    if (topics.some((t) => !t.name.trim())) { toast.error("Every topic needs a name."); return; }
     setSaving(label);
     try { await replaceTopicsAndSources(user.id, topics, globalSources); toast.success("Saved."); await load(); }
     catch (e) { toast.error(friendlyError(e)); }
@@ -122,9 +122,9 @@ function Settings() {
     finally { setSugLoading(false); }
   }
   function addTopic(name: string, description = "", sources: string[] = []) {
-    if (topics.length >= MAX_TOPICS) return toast.error("You can have up to 5 topics.");
+    if (topics.length >= MAX_TOPICS) { toast.error("You can have up to 5 topics."); return; }
     if (!name.trim()) return;
-    if (topics.some((t) => t.name.toLowerCase() === name.trim().toLowerCase())) return toast.error("You already have that topic.");
+    if (topics.some((t) => t.name.toLowerCase() === name.trim().toLowerCase())) { toast.error("You already have that topic."); return; }
     setTopics((p) => [...p, { key: newKey(), name: name.trim().slice(0, 80), description, sources }]);
   }
   async function signOut() {
@@ -148,7 +148,7 @@ function Settings() {
       </div>
 
       <Section id="profile" title="Profile" saving={saving === "profile"} onSave={() => {
-        if (about.trim().length < 30) return toast.error("Please write at least 30 characters about you.");
+        if (about.trim().length < 30) { toast.error("Please write at least 30 characters about you."); return; }
         saveProfile({ full_name: fullName.trim() || null, role: role.trim() || null, about: about.trim() }, "profile");
       }}>
         <div className="grid gap-4 sm:grid-cols-2">

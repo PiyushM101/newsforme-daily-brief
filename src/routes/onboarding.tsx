@@ -340,16 +340,16 @@ export function TopicsStep({
   const isChosen = (n: string) => topics.some((t) => t.name.toLowerCase() === n.toLowerCase());
 
   function toggle(s: Suggestion) {
-    if (isChosen(s.name)) return setTopics((p) => p.filter((t) => t.name.toLowerCase() !== s.name.toLowerCase()));
-    if (full) return toast.error("You can choose up to 5 topics.");
+    if (isChosen(s.name)) { setTopics((p) => p.filter((t) => t.name.toLowerCase() !== s.name.toLowerCase())); return; }
+    if (full) { toast.error("You can choose up to 5 topics."); return; }
     setTopics((p) => [...p, { key: newKey(), name: s.name, description: s.description, sources: s.sources }]);
   }
   function addCustom() {
     const n = custom.trim();
     if (!n) return;
-    if (n.length > 80) return toast.error("Keep topic names under 80 characters.");
-    if (full) return toast.error("You can choose up to 5 topics.");
-    if (isChosen(n)) return toast.error("You already have that topic.");
+    if (n.length > 80) { toast.error("Keep topic names under 80 characters."); return; }
+    if (full) { toast.error("You can choose up to 5 topics."); return; }
+    if (isChosen(n)) { toast.error("You already have that topic."); return; }
     setTopics((p) => [...p, { key: newKey(), name: n, description: "", sources: [], custom: true }]);
     setCustom("");
   }

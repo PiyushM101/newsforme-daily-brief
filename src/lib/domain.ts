@@ -7,8 +7,8 @@ export function cleanDomain(input: string): string | null {
   let d = input.trim().toLowerCase();
   d = d.replace(/^[a-z]+:\/\//, "");
   d = d.replace(/^www\./, "");
-  d = d.split(/[/?#]/)[0];
-  d = d.split(":")[0];
+  d = d.split(/[/?#]/)[0] ?? "";
+  d = d.split(":")[0] ?? "";
   d = d.replace(/\.$/, "");
   if (!/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/.test(d)) return null;
   return d;

@@ -27,8 +27,8 @@ export function SourceChips({
   const [value, setValue] = useState("");
   const add = () => {
     const d = cleanDomain(value);
-    if (!d) return toast.error("That does not look like a website. Try something like bbc.com.");
-    if (sources.includes(d)) return toast.error("That source is already on the list.");
+    if (!d) { toast.error("That does not look like a website. Try something like bbc.com."); return; }
+    if (sources.includes(d)) { toast.error("That source is already on the list."); return; }
     onChange([...sources, d]);
     setValue("");
   };

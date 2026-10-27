@@ -18,10 +18,10 @@ function Login() {
     <div className="mx-auto max-w-md px-5 py-16">
       <h1 className="text-4xl font-semibold">Sign in</h1>
       <p className="mt-3 text-muted-foreground">
-        No password needed. We will email you a link to sign in.
+        No password needed. We will email you a code to sign in.
       </p>
       <div className="mt-8">
-        <MagicLinkForm cta="Send link" />
+        <MagicLinkForm cta="Send code" />
       </div>
     </div>
   );
