@@ -39,9 +39,14 @@ export function SiteFooter() {
     <footer className="mt-16 border-t border-border">
       <div className="mx-auto flex max-w-5xl flex-col gap-2 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:justify-between">
         <span className="font-display text-base font-semibold text-foreground">NewsForMe</span>
-        <a href="mailto:hello@newsforme.fyi" className="hover:text-primary">
-          hello@newsforme.fyi
-        </a>
+        <div className="flex gap-5">
+          <Link to="/privacy" className="hover:text-primary">
+            Privacy
+          </Link>
+          <a href="mailto:hello@newsforme.fyi" className="hover:text-primary">
+            hello@newsforme.fyi
+          </a>
+        </div>
       </div>
     </footer>
   );
