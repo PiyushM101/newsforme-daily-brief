@@ -203,7 +203,13 @@ function Onboarding() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="role">Role or job title</Label>
-              <Input id="role" maxLength={100} value={role} onChange={(e) => setRole(e.target.value)} />
+              <Input
+                id="role"
+                maxLength={100}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                placeholder="MBA candidate at NYU Stern (class of 2027); Product Manager for AdTech at Google"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="about">A little about you</Label>
@@ -213,7 +219,7 @@ function Onboarding() {
                 maxLength={ABOUT_MAX}
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
-                placeholder="I lead product at a payments startup in New York. I care about AI, fintech rules, and the startup funding market."
+                placeholder="Previous experience; Future Goals; Trends that are exciting to you; Area of research; etc."
               />
               <div className="flex justify-between gap-4 text-xs text-muted-foreground">
                 <span>
