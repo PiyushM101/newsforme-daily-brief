@@ -12,7 +12,7 @@ import { HourSelect, LoadingNote, SourceChips, SuggestionCard, TimezonePicker } 
 import { requireUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { fetchSuggestions, newKey, replaceTopicsAndSources, type DraftTopic, type Suggestion } from "@/lib/api";
-import { MAX_TOPICS, friendlyError } from "@/lib/domain";
+import { MAX_TOPICS, MIN_ABOUT, friendlyError } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -173,7 +173,7 @@ function Settings() {
       </div>
 
       <Section id="profile" title="Profile" saving={saving === "profile"} onSave={() => {
-        if (about.trim().length < 30) { toast.error("Please write at least 30 characters about you."); return; }
+        if (about.trim().length < MIN_ABOUT) { toast.error(`Please write at least ${MIN_ABOUT} characters about you.`); return; }
         saveProfile({ full_name: fullName.trim() || null, role: role.trim() || null, about: about.trim() }, "profile");
       }}>
         <div className="grid gap-4 sm:grid-cols-2">
