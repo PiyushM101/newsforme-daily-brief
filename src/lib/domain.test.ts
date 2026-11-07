@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanDomain, formatHour } from "./domain";
+import { ABOUT_TEMPLATE, MIN_ABOUT, aboutLength, cleanDomain, formatHour } from "./domain";
 
 describe("cleanDomain", () => {
   it("strips protocol, www and path, and lowercases", () => {
@@ -20,5 +20,21 @@ describe("formatHour", () => {
     expect(formatHour(8)).toBe("8:00 AM");
     expect(formatHour(12)).toBe("12:00 PM");
     expect(formatHour(19)).toBe("7:00 PM");
+  });
+});
+
+describe("aboutLength", () => {
+  it("counts what the person wrote", () => {
+    expect(aboutLength("  I lead product at a payments startup.  ")).toBe(37);
+  });
+  it("ignores hints left inside brackets", () => {
+    expect(aboutLength("Industry: [Fintech; E-commerce]")).toBe(9);
+  });
+  it("leaves the untouched template short of the minimum", () => {
+    expect(aboutLength(ABOUT_TEMPLATE)).toBeLessThan(MIN_ABOUT);
+  });
+  it("accepts a filled in template", () => {
+    const filled = ABOUT_TEMPLATE.replace(/\[[^\]]*\]/g, "a".repeat(70));
+    expect(aboutLength(filled)).toBeGreaterThanOrEqual(MIN_ABOUT);
   });
 });

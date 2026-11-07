@@ -12,7 +12,7 @@ import { HourSelect, LoadingNote, SourceChips, SuggestionCard, TimezonePicker } 
 import { requireUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { fetchSuggestions, newKey, replaceTopicsAndSources, type DraftTopic, type Suggestion } from "@/lib/api";
-import { MAX_TOPICS, friendlyError } from "@/lib/domain";
+import { ABOUT_MAX, MAX_TOPICS, MIN_ABOUT, aboutLength, friendlyError } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -173,7 +173,7 @@ function Settings() {
       </div>
 
       <Section id="profile" title="Profile" saving={saving === "profile"} onSave={() => {
-        if (about.trim().length < 30) { toast.error("Please write at least 30 characters about you."); return; }
+        if (aboutLength(about) < MIN_ABOUT) { toast.error(`Please write at least ${MIN_ABOUT} characters about you.`); return; }
         saveProfile({ full_name: fullName.trim() || null, role: role.trim() || null, about: about.trim() }, "profile");
       }}>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -182,8 +182,8 @@ function Settings() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="a">About you</Label>
-          <Textarea id="a" rows={4} maxLength={1000} value={about} onChange={(e) => setAbout(e.target.value)} />
-          <div className="text-right text-xs text-muted-foreground">{about.length} / 1000</div>
+          <Textarea id="a" rows={8} maxLength={ABOUT_MAX} value={about} onChange={(e) => setAbout(e.target.value)} />
+          <div className="text-right text-xs text-muted-foreground">{aboutLength(about)} / {MIN_ABOUT} written, {about.length} / {ABOUT_MAX} used</div>
         </div>
       </Section>
 

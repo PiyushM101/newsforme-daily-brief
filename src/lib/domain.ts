@@ -1,6 +1,26 @@
 export const MAX_TOPICS = 5;
 export const MAX_SOURCES = 80;
-export const MIN_ABOUT = 30;
+export const MIN_ABOUT = 300;
+/** Hard cap: the profiles.about column holds 1000 characters. */
+export const ABOUT_MAX = 1000;
+
+/** Scaffold offered on the About you step. People overwrite the bracketed hints. */
+export const ABOUT_TEMPLATE = `Job title: [MBA student; PhD Candidate; Product Analyst; Product Manager; Strategy Consultant]
+Company & Geography: [NYU Stern, USA; BCG New York; PayPal London]
+Industry: [Fintech; E-commerce; Cloud technology]
+Prior experience: [20-50 words]
+Future goals: [20-50 words]`;
+
+/**
+ * How much the person actually wrote. Hints still sitting in [brackets] do not
+ * count, so pasting the template alone does not meet the minimum.
+ */
+export function aboutLength(text: string): number {
+  return text
+    .replace(/\[[^\]]*\]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim().length;
+}
 
 /** Turn whatever the user typed into a bare lowercase domain, or null if it is not one. */
 export function cleanDomain(input: string): string | null {

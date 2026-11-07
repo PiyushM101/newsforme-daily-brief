@@ -24,7 +24,15 @@ import {
   type DraftTopic,
   type Suggestion,
 } from "@/lib/api";
-import { MAX_TOPICS, MIN_ABOUT, formatHour, friendlyError } from "@/lib/domain";
+import {
+  ABOUT_MAX,
+  ABOUT_TEMPLATE,
+  MAX_TOPICS,
+  MIN_ABOUT,
+  aboutLength,
+  formatHour,
+  friendlyError,
+} from "@/lib/domain";
 
 export const Route = createFileRoute("/onboarding")({
   ssr: false,
@@ -125,7 +133,7 @@ function Onboarding() {
   }, [step]);
 
   function canNext() {
-    if (step === 0) return about.trim().length >= MIN_ABOUT;
+    if (step === 0) return aboutLength(about) >= MIN_ABOUT;
     if (step === 1) return topics.length >= 1 && topics.length <= MAX_TOPICS;
     return true;
   }
@@ -201,18 +209,23 @@ function Onboarding() {
               <Label htmlFor="about">A little about you</Label>
               <Textarea
                 id="about"
-                rows={5}
-                maxLength={1000}
+                rows={10}
+                maxLength={ABOUT_MAX}
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
                 placeholder="I lead product at a payments startup in New York. I care about AI, fintech rules, and the startup funding market."
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between gap-4 text-xs text-muted-foreground">
                 <span>
-                  {about.trim().length < MIN_ABOUT ? `At least ${MIN_ABOUT} characters, please.` : "Looks good."}
+                  {aboutLength(about) < MIN_ABOUT
+                    ? `${MIN_ABOUT - aboutLength(about)} to go. Text left inside [brackets] does not count.`
+                    : "Looks good."}
                 </span>
-                <span>{about.length} / 1000</span>
+                <span className="shrink-0">
+                  {aboutLength(about)} / {MIN_ABOUT} written, {about.length} / {ABOUT_MAX} used
+                </span>
               </div>
+              <AboutTemplate about={about} setAbout={setAbout} />
             </div>
           </section>
         )}
@@ -316,6 +329,46 @@ function Onboarding() {
           </Button>
         )}
       </div>
+    </div>
+  );
+}
+
+function AboutTemplate({
+  about,
+  setAbout,
+}: {
+  about: string;
+  setAbout: Dispatch<SetStateAction<string>>;
+}) {
+  const added = about.includes("Job title:");
+  const joined = about.trim() ? `${about.trimEnd()}\n\n${ABOUT_TEMPLATE}` : ABOUT_TEMPLATE;
+  const noRoom = joined.length > ABOUT_MAX;
+  function apply() {
+    setAbout((v) => {
+      const next = v.trim() ? `${v.trimEnd()}\n\n${ABOUT_TEMPLATE}` : ABOUT_TEMPLATE;
+      return next.slice(0, ABOUT_MAX);
+    });
+  }
+  return (
+    <div className="rounded-lg border bg-muted/40 p-4">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium text-foreground">
+            Edit this if you think it is relevant
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {noRoom && !added
+              ? "Not enough room left. Shorten what you wrote first."
+              : "A filled in version helps us pick sharper topics. Replace the parts in brackets."}
+          </p>
+        </div>
+        <Button type="button" variant="outline" size="sm" onClick={apply} disabled={added || noRoom}>
+          {added ? "Added" : "Use this"}
+        </Button>
+      </div>
+      <pre className="mt-3 overflow-x-auto font-sans text-xs leading-relaxed whitespace-pre-wrap text-muted-foreground">
+        {ABOUT_TEMPLATE}
+      </pre>
     </div>
   );
 }
