@@ -10,6 +10,11 @@ export const Route = createFileRoute("/unsubscribe")({
   head: () => ({
     meta: [
       { title: "Unsubscribe | NewsForMe" },
+      { name: "description", content: "Manage your NewsForMe daily email subscription." },
+      { property: "og:title", content: "Unsubscribe | NewsForMe" },
+      { property: "og:description", content: "Manage your NewsForMe daily email subscription." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
   }),

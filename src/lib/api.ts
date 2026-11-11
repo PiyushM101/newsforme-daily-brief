@@ -66,3 +66,22 @@ export async function replaceTopicsAndSources(
   });
   if (error) throw error;
 }
+
+/** Save every editable settings section using the existing database operations. */
+export async function saveAllSettings(
+  userId: string,
+  profile: {
+    full_name: string | null;
+    role: string | null;
+    about: string;
+    send_hour: number;
+    timezone: string;
+    is_active: boolean;
+  },
+  topics: DraftTopic[],
+  globalSources: string[],
+) {
+  const { error } = await supabase.from("profiles").update(profile).eq("id", userId);
+  if (error) throw error;
+  await replaceTopicsAndSources(userId, topics, globalSources);
+}
