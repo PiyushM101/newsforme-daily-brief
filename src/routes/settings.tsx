@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { HourSelect, LoadingNote, SourceChips, SuggestionCard, TimezonePicker } from "@/components/editors";
 import { requireUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { fetchSuggestions, newKey, replaceTopicsAndSources, type DraftTopic, type Suggestion } from "@/lib/api";
+import { fetchSuggestions, newKey, saveAllSettings, type DraftTopic, type Suggestion } from "@/lib/api";
 import { MAX_TOPICS, MIN_ABOUT, friendlyError } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 import {
@@ -35,6 +35,8 @@ export const Route = createFileRoute("/settings")({
       { name: "description", content: "Change your topics, sources and delivery time." },
       { property: "og:title", content: "Settings | NewsForMe" },
       { property: "og:description", content: "Change your topics, sources and delivery time." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Settings,
@@ -42,14 +44,11 @@ export const Route = createFileRoute("/settings")({
 
 type Briefing = { id: string; kind: string; status: string; subject: string | null; created_at: string };
 
-function Section({ id, title, children, onSave, saving }: { id: string; title: string; children: React.ReactNode; onSave: () => void; saving: boolean }) {
+function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} className="rounded-lg border border-border bg-card p-5 sm:p-6">
       <h2 className="text-2xl font-semibold">{title}</h2>
       <div className="mt-4 space-y-4">{children}</div>
-      <div className="mt-5 flex justify-end">
-        <Button onClick={onSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
-      </div>
     </section>
   );
 }
@@ -60,7 +59,7 @@ function Settings() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [saving, setSaving] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState("");
   const [about, setAbout] = useState("");
@@ -112,18 +111,25 @@ function Settings() {
     }
   }, [loading, pause]);
 
-  async function saveProfile(fields: Record<string, unknown>, label: string) {
-    setSaving(label);
-    const { error } = await supabase.from("profiles").update(fields).eq("id", user.id);
-    setSaving(null);
-    if (error) toast.error(friendlyError(error)); else toast.success("Saved.");
-  }
-  async function saveTopics(label: string) {
+  async function saveSettings() {
+    if (saving) return;
+    if (about.trim().length < MIN_ABOUT) { toast.error(`Please write at least ${MIN_ABOUT} characters about you.`); return; }
     if (topics.some((t) => !t.name.trim())) { toast.error("Every topic needs a name."); return; }
-    setSaving(label);
-    try { await replaceTopicsAndSources(user.id, topics, globalSources); toast.success("Saved."); await load(); }
-    catch (e) { toast.error(friendlyError(e)); }
-    finally { setSaving(null); }
+    setSaving(true);
+    try {
+      await saveAllSettings(user.id, {
+        full_name: fullName.trim() || null,
+        role: role.trim() || null,
+        about: about.trim(),
+        send_hour: hour,
+        timezone: tz,
+        is_active: active,
+      }, topics, globalSources);
+      toast.success("All settings saved.");
+    } catch (e) {
+      toast.error(friendlyError(e));
+      toast.error("Some changes may have saved. Your edits are still here. Please save again.");
+    } finally { setSaving(false); }
   }
   async function getSuggestions() {
     setSugLoading(true);
@@ -172,10 +178,8 @@ function Settings() {
         <Button variant="outline" onClick={signOut}>Sign out</Button>
       </div>
 
-      <Section id="profile" title="Profile" saving={saving === "profile"} onSave={() => {
-        if (about.trim().length < MIN_ABOUT) { toast.error(`Please write at least ${MIN_ABOUT} characters about you.`); return; }
-        saveProfile({ full_name: fullName.trim() || null, role: role.trim() || null, about: about.trim() }, "profile");
-      }}>
+      <fieldset disabled={saving} aria-busy={saving} className="min-w-0 space-y-6">
+      <Section id="profile" title="Profile">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2"><Label htmlFor="n">Full name</Label><Input id="n" maxLength={100} value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
           <div className="space-y-2"><Label htmlFor="r">Role</Label><Input id="r" maxLength={100} value={role} onChange={(e) => setRole(e.target.value)} /></div>
@@ -187,7 +191,7 @@ function Settings() {
         </div>
       </Section>
 
-      <Section id="topics" title={`Topics (${topics.length} of ${MAX_TOPICS})`} saving={saving === "topics"} onSave={() => saveTopics("topics")}>
+      <Section id="topics" title={`Topics (${topics.length} of ${MAX_TOPICS})`}>
         {topics.length === 0 && <p className="text-sm text-muted-foreground">No topics yet. Add one below.</p>}
         {topics.map((t) => (
           <div key={t.key} className="flex gap-2">
@@ -216,7 +220,7 @@ function Settings() {
         )}
       </Section>
 
-      <Section id="sources" title="Sources" saving={saving === "sources"} onSave={() => saveTopics("sources")}>
+      <Section id="sources" title="Sources">
         <p className="text-sm text-muted-foreground">Reuters and AP are always included.</p>
         {topics.map((t) => (
           <div key={t.key}>
@@ -230,7 +234,7 @@ function Settings() {
         </div>
       </Section>
 
-      <Section id="delivery" title="Delivery" saving={saving === "delivery"} onSave={() => saveProfile({ send_hour: hour, timezone: tz, is_active: active }, "delivery")}>
+      <Section id="delivery" title="Delivery">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2"><Label>Time</Label><HourSelect value={hour} onChange={setHour} /></div>
           <div className="space-y-2"><Label>Time zone</Label><TimezonePicker value={tz} onChange={setTz} /></div>
@@ -243,6 +247,11 @@ function Settings() {
           <Switch id="pause" checked={!active} onCheckedChange={(v) => setActive(!v)} />
         </div>
       </Section>
+
+      <div className="sticky bottom-0 z-10 flex justify-end border-t border-border bg-background py-4">
+        <Button onClick={saveSettings} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
+      </div>
+      </fieldset>
 
       <section className="rounded-lg border border-border bg-card p-5 sm:p-6">
         <h2 className="text-2xl font-semibold">Recent briefings</h2>
