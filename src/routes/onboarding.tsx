@@ -35,6 +35,8 @@ export const Route = createFileRoute("/onboarding")({
       { name: "description", content: "Tell us what you care about and when to send your news." },
       { property: "og:title", content: "Set up your brief | NewsForMe" },
       { property: "og:description", content: "Tell us what you care about and when to send your news." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Onboarding,
