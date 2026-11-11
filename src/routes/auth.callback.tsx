@@ -5,7 +5,14 @@ import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/auth/callback")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Signing you in | NewsForMe" }] }),
+  head: () => ({ meta: [
+    { title: "Signing you in | NewsForMe" },
+    { name: "description", content: "Complete your NewsForMe email sign-in." },
+    { property: "og:title", content: "Signing you in | NewsForMe" },
+    { property: "og:description", content: "Complete your NewsForMe email sign-in." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: Callback,
 });
 

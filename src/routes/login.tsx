@@ -8,6 +8,8 @@ export const Route = createFileRoute("/login")({
       { name: "description", content: "Sign in to NewsForMe with a link sent to your email." },
       { property: "og:title", content: "Sign in | NewsForMe" },
       { property: "og:description", content: "Sign in to NewsForMe with a link sent to your email." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Login,

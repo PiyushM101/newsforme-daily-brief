@@ -8,6 +8,8 @@ export const Route = createFileRoute("/privacy")({
       { name: "description", content: "What NewsForMe stores, why, and how to delete it." },
       { property: "og:title", content: "Privacy | NewsForMe" },
       { property: "og:description", content: "What NewsForMe stores, why, and how to delete it." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Privacy,
