@@ -68,7 +68,11 @@ function FieldInput({ def, value, onChange }: { def: FieldDef; value: string | s
     return (
       <div className="space-y-2">
         <Label htmlFor={id}>{label}</Label>
-        <Input id={id} maxLength={def.maxLen} value={v} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
+        {(def.maxLen ?? 0) > 120 ? (
+          <Textarea id={id} rows={4} maxLength={def.maxLen} value={v} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
+        ) : (
+          <Input id={id} maxLength={def.maxLen} value={v} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
+        )}
         {def.minLen && (
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>{def.hint}</span>

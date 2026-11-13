@@ -20,10 +20,10 @@ describe("persona answers", () => {
     const a: Answers = { persona: "professional", fields: { seniority: "Senior", industry: ["a", "b", "c", "d"], function: ["Product"], goals: "Lead" }, extra: "" };
     expect(missingFields(a)).toEqual(["Industry"]);
   });
-  it("academia overview must be 20 to 50 characters", () => {
+  it("academia overview must be 20 to 500 characters", () => {
     const base: Answers = { persona: "academia", fields: { level: "Postdoc", field: "Biology", overview: "short" }, extra: "" };
     expect(missingFields(base)).toEqual(["Research in a few words"]);
-    expect(missingFields({ ...base, fields: { ...base.fields, overview: "x".repeat(51) } })).toEqual(["Research in a few words"]);
+    expect(missingFields({ ...base, fields: { ...base.fields, overview: "x".repeat(501) } })).toEqual(["Research in a few words"]);
     expect(missingFields({ ...base, fields: { ...base.fields, overview: "x".repeat(20) } })).toEqual([]);
   });
   it("extra details capped at 300 characters", () => {
