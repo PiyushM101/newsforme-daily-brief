@@ -1,6 +1,5 @@
 export const MAX_TOPICS = 5;
 export const MAX_SOURCES = 80;
-export const MIN_ABOUT = 300;
 
 /** Turn whatever the user typed into a bare lowercase domain, or null if it is not one. */
 export function cleanDomain(input: string): string | null {

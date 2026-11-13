@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { PersonaForm } from "@/components/persona-form";
+import { buildAbout, buildRole, emptyAnswers, missingFields, parseAbout, type Answers } from "@/lib/persona";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +14,7 @@ import { HourSelect, LoadingNote, SourceChips, SuggestionCard, TimezonePicker } 
 import { requireUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { fetchSuggestions, newKey, saveAllSettings, type DraftTopic, type Suggestion } from "@/lib/api";
-import { MAX_TOPICS, MIN_ABOUT, friendlyError } from "@/lib/domain";
+import { MAX_TOPICS, friendlyError } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -63,6 +65,7 @@ function Settings() {
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState("");
   const [about, setAbout] = useState("");
+  const [answers, setAnswers] = useState<Answers>(emptyAnswers);
   const [hour, setHour] = useState(8);
   const [tz, setTz] = useState("America/New_York");
   const [active, setActive] = useState(true);
@@ -88,7 +91,7 @@ function Settings() {
       for (const r of [p, t, s, b]) if (r.error) throw r.error;
       const pr = p.data;
       if (pr) {
-        setFullName(pr.full_name ?? ""); setRole(pr.role ?? ""); setAbout(pr.about ?? "");
+        setFullName(pr.full_name ?? ""); setRole(pr.role ?? ""); setAbout(pr.about ?? ""); setAnswers(parseAbout(pr.about) ?? emptyAnswers());
         setHour(pr.send_hour ?? 8); setTz(pr.timezone ?? "America/New_York"); setActive(pr.is_active ?? true);
       }
       const src = s.data ?? [];
@@ -113,14 +116,18 @@ function Settings() {
 
   async function saveSettings() {
     if (saving) return;
-    if (about.trim().length < MIN_ABOUT) { toast.error(`Please write at least ${MIN_ABOUT} characters about you.`); return; }
+    const missing = answers.persona ? missingFields(answers) : [];
+    if (missing.length) { toast.error(`Please fill in: ${missing.join(", ")}.`); return; }
+    // Older free-text profiles stay untouched until a persona is picked.
+    const nextRole = answers.persona ? buildRole(answers) : role.trim();
+    const nextAbout = answers.persona ? buildAbout(answers) : about.trim();
     if (topics.some((t) => !t.name.trim())) { toast.error("Every topic needs a name."); return; }
     setSaving(true);
     try {
       await saveAllSettings(user.id, {
         full_name: fullName.trim() || null,
-        role: role.trim() || null,
-        about: about.trim(),
+        role: nextRole || null,
+        about: nextAbout,
         send_hour: hour,
         timezone: tz,
         is_active: active,
@@ -133,7 +140,7 @@ function Settings() {
   }
   async function getSuggestions() {
     setSugLoading(true);
-    try { setSugs(await fetchSuggestions({ mode: "suggest", about, role })); }
+    try { setSugs(await fetchSuggestions({ mode: "suggest", about: answers.persona ? buildAbout(answers) : about, role: answers.persona ? buildRole(answers) : role })); }
     catch { toast.error("We could not load ideas. Try again or type your own."); }
     finally { setSugLoading(false); }
   }
@@ -180,15 +187,13 @@ function Settings() {
 
       <fieldset disabled={saving} aria-busy={saving} className="min-w-0 space-y-6">
       <Section id="profile" title="Profile">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2"><Label htmlFor="n">Full name</Label><Input id="n" maxLength={100} value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
-          <div className="space-y-2"><Label htmlFor="r">Role</Label><Input id="r" maxLength={100} value={role} onChange={(e) => setRole(e.target.value)} /></div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="a">About you</Label>
-          <Textarea id="a" rows={4} maxLength={1000} value={about} onChange={(e) => setAbout(e.target.value)} />
-          <div className="text-right text-xs text-muted-foreground">{about.length} / 1000</div>
-        </div>
+        <div className="space-y-2"><Label htmlFor="n">Full name</Label><Input id="n" maxLength={100} value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
+        {!answers.persona && about.trim() && (
+          <p className="rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+            We now ask a few quick questions instead of a long note. Pick what describes you to update. Until then we keep your current note.
+          </p>
+        )}
+        <PersonaForm value={answers} onChange={setAnswers} />
       </Section>
 
       <Section id="topics" title={`Topics (${topics.length} of ${MAX_TOPICS})`}>
