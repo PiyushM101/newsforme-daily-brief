@@ -104,9 +104,9 @@ export function missingFields(a: Answers): string[] {
 export function buildRole(a: Answers): string {
   const f = a.fields;
   let r = "";
-  if (a.persona === "student") r = `${asText(f.degree)} student${asText(f.school) ? `, ${asText(f.school)}` : ""}`;
-  if (a.persona === "professional") r = `${asText(f.seniority)} ${asList(f.function)[0] ?? ""}, ${asList(f.industry)[0] ?? ""}`;
-  if (a.persona === "academia") r = `${asText(f.level)}, ${asText(f.field)}`;
+  if (a.persona === "student") r = `${asText(f["degree"])} student${asText(f["school"]) ? `, ${asText(f["school"])}` : ""}`;
+  if (a.persona === "professional") r = `${asText(f["seniority"])} ${asList(f["function"])[0] ?? ""}, ${asList(f["industry"])[0] ?? ""}`;
+  if (a.persona === "academia") r = `${asText(f["level"])}, ${asText(f["field"])}`;
   return r.replace(/\s+/g, " ").replace(/,\s*$/, "").trim().slice(0, 100);
 }
 

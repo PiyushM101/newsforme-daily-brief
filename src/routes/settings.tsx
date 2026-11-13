@@ -8,7 +8,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { HourSelect, LoadingNote, SourceChips, SuggestionCard, TimezonePicker } from "@/components/editors";
 import { requireUser } from "@/lib/auth";

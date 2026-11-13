@@ -89,7 +89,7 @@ function SingleSelect({ id, label, def, value, onChange }: { id: string; label: 
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
       <Select
-        value={other ? "Other" : value || undefined}
+        value={other ? "Other" : value}
         onValueChange={(v) => {
           if (v === "Other") { setOther(true); onChange(""); } else { setOther(false); onChange(v); }
         }}
