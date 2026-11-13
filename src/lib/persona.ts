@@ -51,7 +51,7 @@ const ACADEMIC_LEVELS = [
 export const FIELDS: Record<Persona, FieldDef[]> = {
   student: [
     { key: "degree", label: "Degree", kind: "select", options: DEGREES },
-    { key: "school", label: "School", kind: "text", maxLen: 80, placeholder: "For example: NYU Stern" },
+    { key: "school", label: "School", kind: "text", maxLen: 80, optional: true, placeholder: "For example: NYU Stern" },
     { key: "specializations", label: "Specializations", kind: "tags", max: MAX_PICKS, maxLen: 40, placeholder: "For example: Strategy" },
     { key: "priorFunction", label: "Prior experience: function", kind: "multi", options: FUNCTIONS, max: MAX_PICKS, optional: true },
     { key: "priorIndustry", label: "Prior experience: industry", kind: "multi", options: INDUSTRIES, max: MAX_PICKS, optional: true },

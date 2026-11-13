@@ -11,9 +11,10 @@ const student: Answers = {
 };
 
 describe("persona answers", () => {
-  it("student prior experience is optional, everything else required", () => {
+  it("student prior experience and school are optional, everything else required", () => {
     expect(missingFields(student)).toEqual([]);
-    expect(missingFields({ ...student, fields: { ...student.fields, school: "" } })).toEqual(["School"]);
+    expect(missingFields({ ...student, fields: { ...student.fields, school: "" } })).toEqual([]);
+    expect(missingFields({ ...student, fields: { ...student.fields, degree: "" } })).toEqual(["Degree"]);
   });
   it("allows at most 3 industries", () => {
     const a: Answers = { persona: "professional", fields: { seniority: "Senior", industry: ["a", "b", "c", "d"], function: ["Product"], goals: "Lead" }, extra: "" };
