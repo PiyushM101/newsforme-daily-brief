@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Settings uses one client-side save operation for profile, delivery, topics, and sources through existing database calls; no new database structure is needed.
+- Persona answers (student, professional, academia) are stored only as generated text in profiles.role and profiles.about, with a marker first line so the app can read them back; keeps the n8n backend unchanged.
