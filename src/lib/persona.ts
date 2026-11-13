@@ -104,9 +104,9 @@ export function missingFields(a: Answers): string[] {
 export function buildRole(a: Answers): string {
   const f = a.fields;
   let r = "";
-  if (a.persona === "student") r = `${asText(f.degree)} student${asText(f.school) ? `, ${asText(f.school)}` : ""}`;
-  if (a.persona === "professional") r = `${asText(f.seniority)} ${asList(f.function)[0] ?? ""}, ${asList(f.industry)[0] ?? ""}`;
-  if (a.persona === "academia") r = `${asText(f.level)}, ${asText(f.field)}`;
+  if (a.persona === "student") r = `${asText(f["degree"])} student${asText(f["school"]) ? `, ${asText(f["school"])}` : ""}`;
+  if (a.persona === "professional") r = `${asText(f["seniority"])} ${asList(f["function"])[0] ?? ""}, ${asList(f["industry"])[0] ?? ""}`;
+  if (a.persona === "academia") r = `${asText(f["level"])}, ${asText(f["field"])}`;
   return r.replace(/\s+/g, " ").replace(/,\s*$/, "").trim().slice(0, 100);
 }
 
@@ -126,11 +126,9 @@ export function buildAbout(a: Answers): string {
 export function parseAbout(about: string | null | undefined): Answers | null {
   const lines = (about ?? "").split("\n");
   if (lines[0]?.trim() !== MARKER) return null;
-  const map = new Map<string, string>();
-  for (const l of lines.slice(1)) {
-    const i = l.indexOf(": ");
-    if (i > 0) map.set(l.slice(0, i), l.slice(i + 2));
-  }
+  const rest = lines.slice(1);
+  const get = (label: string) => rest.find((l) => l.startsWith(label + ": "))?.slice(label.length + 2);
+  const map = { get };
   const persona = (Object.keys(PERSONA_LABEL) as Persona[]).find((p) => PERSONA_LABEL[p] === map.get("Persona")) ?? null;
   if (!persona) return null;
   const fields: Answers["fields"] = {};

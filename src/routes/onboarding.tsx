@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { PersonaForm } from "@/components/persona-form";
+import { buildAbout, buildRole, emptyAnswers, missingFields, parseAbout, type Answers } from "@/lib/persona";
 import { Progress } from "@/components/ui/progress";
 import {
   HourSelect,
@@ -24,7 +25,7 @@ import {
   type DraftTopic,
   type Suggestion,
 } from "@/lib/api";
-import { MAX_TOPICS, MIN_ABOUT, formatHour, friendlyError } from "@/lib/domain";
+import { MAX_TOPICS, formatHour, friendlyError } from "@/lib/domain";
 
 export const Route = createFileRoute("/onboarding")({
   ssr: false,
@@ -48,8 +49,9 @@ function Onboarding() {
   const { user } = Route.useRouteContext();
   const [step, setStep] = useState(0);
   const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState("");
-  const [about, setAbout] = useState("");
+  const [answers, setAnswers] = useState<Answers>(emptyAnswers);
+  const role = buildRole(answers);
+  const about = buildAbout(answers);
   const [topics, setTopics] = useState<DraftTopic[]>([]);
   const [globalSources, setGlobalSources] = useState<string[]>([]);
   const [hour, setHour] = useState(8);
@@ -73,8 +75,8 @@ function Onboarding() {
       .then(({ data }) => {
         if (data) {
           setFullName((v) => v || data.full_name || "");
-          setRole((v) => v || data.role || "");
-          setAbout((v) => v || data.about || "");
+          const parsed = parseAbout(data.about);
+          if (parsed) setAnswers((v) => (v.persona ? v : parsed));
         }
       });
   }, [user.id]);
@@ -127,7 +129,7 @@ function Onboarding() {
   }, [step]);
 
   function canNext() {
-    if (step === 0) return about.trim().length >= MIN_ABOUT;
+    if (step === 0) return missingFields(answers).length === 0;
     if (step === 1) return topics.length >= 1 && topics.length <= MAX_TOPICS;
     return true;
   }
@@ -139,8 +141,8 @@ function Onboarding() {
         .from("profiles")
         .update({
           full_name: fullName.trim().slice(0, 100) || null,
-          role: role.trim().slice(0, 100) || null,
-          about: about.trim().slice(0, 1000),
+          role: role || null,
+          about,
           timezone: tz,
           send_hour: hour,
           is_active: true,
@@ -195,33 +197,10 @@ function Onboarding() {
               <Label htmlFor="name">Full name</Label>
               <Input id="name" maxLength={100} value={fullName} onChange={(e) => setFullName(e.target.value)} />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">Role or job title</Label>
-              <Input
-                id="role"
-                maxLength={100}
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="MBA candidate at NYU Stern (class of 2027); Product Manager for AdTech at Google"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="about">A little about you</Label>
-              <Textarea
-                id="about"
-                rows={5}
-                maxLength={1000}
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-                placeholder="Previous experience; Future Goals; Trends that are exciting to you; Area of research; etc."
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>
-                  {about.trim().length < MIN_ABOUT ? `At least ${MIN_ABOUT} characters, please.` : "Looks good."}
-                </span>
-                <span>{about.length} / 1000</span>
-              </div>
-            </div>
+            <PersonaForm value={answers} onChange={setAnswers} />
+            {answers.persona && missingFields(answers).length > 0 && (
+              <p className="text-sm text-muted-foreground">Still needed: {missingFields(answers).join(", ")}.</p>
+            )}
           </section>
         )}
 

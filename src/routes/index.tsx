@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
 });
 
 const steps = [
-  { n: "1", t: "Tell us about you", d: "A few lines about your work and what you care about." },
+  { n: "1", t: "Tell us about you", d: "A few quick questions about your studies, work or research." },
   { n: "2", t: "Pick up to 5 topics", d: "We suggest some. You can add your own." },
   { n: "3", t: "Choose sources and time", d: "Pick the sites you trust and when the email lands." },
 ];
