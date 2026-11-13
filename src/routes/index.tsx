@@ -34,21 +34,23 @@ const faqs = [
 function Landing() {
   return (
     <div className="mx-auto max-w-5xl px-5">
-      <section className="grid gap-12 py-14 md:grid-cols-[1.15fr_1fr] md:items-center md:py-20">
-        <div>
+      <section className="flex flex-col gap-12 py-14 md:py-20">
+        <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">The morning edition</p>
           <h1 className="mt-4 text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">
             Your news. Picked for you. In your inbox every morning.
           </h1>
-          <p className="mt-5 max-w-lg text-lg text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground">
             One short email a day. Only the stories that matter to you. Set it up in two minutes.
           </p>
-          <div className="mt-8 max-w-lg">
+          <div className="mx-auto mt-8 max-w-lg text-left">
             <MagicLinkForm cta="Get started" />
             <p className="mt-2 text-xs text-muted-foreground">We will email you a code. No password.</p>
           </div>
         </div>
-        <SampleEmail />
+        <div className="mx-auto w-full max-w-xl">
+          <SampleEmail />
+        </div>
       </section>
 
       <section className="rule-double py-12">
