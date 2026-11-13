@@ -77,6 +77,18 @@ function Landing() {
           ))}
         </Accordion>
       </section>
+
+      <section className="rule-double py-14 text-center">
+        <h2 className="font-display text-3xl font-semibold md:text-4xl">
+          Ready for a calmer morning?
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+          Enter your email and we will send you a sign-in link. No password needed.
+        </p>
+        <div className="mx-auto mt-6 max-w-md">
+          <MagicLinkForm cta="Get started" />
+        </div>
+      </section>
     </div>
   );
 }
