@@ -36,7 +36,7 @@ export function PersonaForm({ value, onChange }: { value: Answers; onChange: (a:
             <FieldInput key={`${value.persona}-${f.key}`} def={f} value={value.fields[f.key]} onChange={(v) => setField(f.key, v)} />
           ))}
           <div className="space-y-2">
-            <Label htmlFor="extra">Anything else? (optional)</Label>
+            <Label htmlFor="extra">Tell us more about yourself like interests, hobbies, and news outside your research you'd like to see (optional)</Label>
             <Textarea
               id="extra"
               rows={3}

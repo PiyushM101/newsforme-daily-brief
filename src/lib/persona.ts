@@ -70,7 +70,7 @@ export const FIELDS: Record<Persona, FieldDef[]> = {
   academia: [
     { key: "level", label: "Level", kind: "select", options: ACADEMIC_LEVELS },
     { key: "field", label: "Field of research", kind: "text", maxLen: 80, placeholder: "For example: Computational biology" },
-    { key: "overview", label: "Research in a few words", kind: "text", minLen: 20, maxLen: 50, placeholder: "For example: protein folding with deep learning", hint: "20 to 50 characters." },
+    { key: "overview", label: "Research in a few words", kind: "text", minLen: 20, maxLen: 500, placeholder: "For example: protein folding with deep learning", hint: "20 to 500 characters." },
   ],
 };
 
