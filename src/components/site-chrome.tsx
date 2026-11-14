@@ -22,7 +22,7 @@ export function SiteHeader() {
         </Link>
         {signedIn === null ? null : signedIn ? (
           <Link to="/settings" className="text-sm font-medium text-foreground hover:text-primary">
-            Settings
+            Profile
           </Link>
         ) : (
           <Link to="/login" className="text-sm font-medium text-foreground hover:text-primary">
