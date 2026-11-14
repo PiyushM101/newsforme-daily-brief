@@ -37,7 +37,7 @@ function Landing() {
       <section className="flex flex-col gap-12 py-14 md:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">The morning edition</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">
+          <h1 className="mt-4 text-4xl font-bold leading-[1.2] sm:text-5xl md:text-6xl">
             Your news. Picked for you. In your inbox every morning.
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground">
@@ -100,7 +100,7 @@ function SampleEmail() {
     { tag: "Funding", h: "Early stage deals pick up again", p: "Seed rounds grew for a third month. Most went to AI tools." },
   ];
   return (
-    <div className="rotate-1 rounded-lg border border-border bg-card p-6 shadow-paper">
+    <div className="rounded-sm border border-border bg-card p-6 shadow-paper">
       <div className="flex items-center justify-between border-b border-border pb-3 text-xs text-muted-foreground">
         <span>From: NewsForMe</span>
         <span>7:00 AM</span>
