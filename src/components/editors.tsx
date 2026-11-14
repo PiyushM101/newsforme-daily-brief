@@ -155,7 +155,7 @@ export function SuggestionCard({
       aria-pressed={selected}
       disabled={disabled && !selected}
       className={cn(
-        "relative rounded-lg border bg-card p-4 text-left transition-all",
+        "relative rounded-xl border bg-card p-4 text-left transition-all",
         selected ? "border-primary ring-2 ring-primary/30" : "border-border hover:border-foreground/40",
         disabled && !selected && "cursor-not-allowed opacity-50",
       )}
@@ -165,7 +165,7 @@ export function SuggestionCard({
           <Check className="h-3 w-3" />
         </span>
       )}
-      <div className="pr-6 font-display text-lg font-semibold">{name}</div>
+      <div className="pr-6 text-lg font-bold tracking-tight">{name}</div>
       {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
     </button>
   );

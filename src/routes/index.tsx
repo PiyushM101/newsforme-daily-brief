@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MagicLinkForm } from "@/components/magic-link-form";
+import { LogoMark } from "@/components/site-chrome";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/")({
@@ -34,18 +35,18 @@ const faqs = [
 function Landing() {
   return (
     <div className="mx-auto max-w-5xl px-5">
-      <section className="flex flex-col gap-12 py-14 md:py-20">
+      <section className="flex flex-col gap-14 py-14 md:py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">The morning edition</p>
-          <h1 className="mt-4 text-4xl font-bold leading-[1.2] sm:text-5xl md:text-6xl">
+          <LogoMark className="h-16 w-16 text-3xl rounded-xl" />
+          <h1 className="mt-6 text-4xl leading-[1.1] sm:text-5xl md:text-6xl">
             Your news. Picked for you. In your inbox every morning.
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground">
             One short email a day. Only the stories that matter to you. Set it up in two minutes.
           </p>
-          <div className="mx-auto mt-8 max-w-lg text-left">
+          <div className="mx-auto mt-8 max-w-md text-left">
             <MagicLinkForm cta="Get started" />
-            <p className="mt-2 text-xs text-muted-foreground">We will email you a code. No password.</p>
+            <p className="mt-2 text-center text-xs text-muted-foreground">We will email you a code. No password.</p>
           </div>
         </div>
         <div className="mx-auto w-full max-w-xl">
@@ -53,35 +54,35 @@ function Landing() {
         </div>
       </section>
 
-      <section className="rule-double py-12">
-        <h2 className="text-3xl font-semibold">How it works</h2>
+      <section className="border-t border-border py-14">
+        <h2 className="text-3xl">How it works</h2>
         <div className="mt-8 grid gap-8 sm:grid-cols-3">
           {steps.map((s) => (
             <div key={s.n}>
-              <div className="font-display text-5xl font-bold text-primary">{s.n}</div>
-              <h3 className="mt-2 text-xl font-semibold">{s.t}</h3>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground">
+                {s.n}
+              </div>
+              <h3 className="mt-4 text-xl">{s.t}</h3>
               <p className="mt-1 text-muted-foreground">{s.d}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="rule-double py-12">
-        <h2 className="text-3xl font-semibold">Questions</h2>
+      <section className="border-t border-border py-14">
+        <h2 className="text-3xl">Questions</h2>
         <Accordion type="single" collapsible className="mt-4 max-w-2xl">
           {faqs.map((f) => (
             <AccordionItem key={f.q} value={f.q}>
-              <AccordionTrigger className="text-base">{f.q}</AccordionTrigger>
+              <AccordionTrigger className="text-base font-semibold">{f.q}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
       </section>
 
-      <section className="rule-double py-14 text-center">
-        <h2 className="font-display text-3xl font-semibold md:text-4xl">
-          Ready for a calmer morning?
-        </h2>
+      <section className="border-t border-border py-16 text-center">
+        <h2 className="text-3xl md:text-4xl">Ready for a calmer morning?</h2>
         <p className="mx-auto mt-3 max-w-md text-muted-foreground">
           Enter your email and we will send you a sign-in link. No password needed.
         </p>
@@ -100,21 +101,22 @@ function SampleEmail() {
     { tag: "Funding", h: "Early stage deals pick up again", p: "Seed rounds grew for a third month. Most went to AI tools." },
   ];
   return (
-    <div className="rounded-sm border border-border bg-card p-6 shadow-paper">
-      <div className="flex items-center justify-between border-b border-border pb-3 text-xs text-muted-foreground">
-        <span>From: NewsForMe</span>
-        <span>7:00 AM</span>
+    <div className="rounded-xl border border-border bg-card p-6 shadow-card sm:p-8">
+      <div className="flex items-center gap-3">
+        <LogoMark className="h-10 w-10 text-lg" />
+        <div className="min-w-0 text-sm">
+          <div className="font-semibold text-foreground">NewsForMe</div>
+          <div className="text-muted-foreground">Tuesday, 7:00 AM · 3 min read</div>
+        </div>
       </div>
-      <div className="pt-4 text-center">
-        <div className="font-display text-2xl font-bold">Your Morning Brief</div>
-        <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">Tuesday, for Maya</div>
-      </div>
-      <div className="rule-double mt-4 space-y-4 pt-4">
+      <div className="mt-5 text-2xl font-bold tracking-tight">Your Morning Brief</div>
+      <div className="mt-1 text-muted-foreground">Three stories for Maya today.</div>
+      <div className="mt-5 space-y-5 border-t border-border pt-5">
         {items.map((i) => (
           <article key={i.h}>
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-primary">{i.tag}</div>
-            <h4 className="font-display text-lg font-semibold leading-snug">{i.h}</h4>
-            <p className="text-sm text-muted-foreground">{i.p}</p>
+            <div className="text-xs font-bold uppercase tracking-wide text-link">{i.tag}</div>
+            <h4 className="mt-0.5 text-lg leading-snug">{i.h}</h4>
+            <p className="mt-1 font-serif text-[17px] leading-relaxed text-foreground/85">{i.p}</p>
           </article>
         ))}
       </div>

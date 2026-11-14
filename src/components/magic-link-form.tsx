@@ -63,9 +63,9 @@ export function MagicLinkForm({ cta = "Send my code" }: { cta?: string }) {
 
   if (sentTo) {
     return (
-      <div className="rounded-lg border border-border bg-card p-5 shadow-paper">
-        <div className="flex items-center gap-2 font-display text-xl font-semibold">
-          <Mail className="h-5 w-5 text-primary" /> Check your inbox
+      <div className="rounded-xl border border-border bg-card p-5 shadow-card">
+        <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
+          <Mail className="h-5 w-5 text-link" /> Check your inbox
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
           We sent a sign in code to <strong className="text-foreground">{sentTo}</strong>. Type it

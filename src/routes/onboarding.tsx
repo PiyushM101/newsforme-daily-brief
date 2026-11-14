@@ -261,7 +261,7 @@ function Onboarding() {
                 <TimezonePicker value={tz} onChange={setTz} />
               </div>
             </div>
-            <div className="rule-double space-y-3 pt-5 text-sm">
+            <div className="space-y-3 border-t border-border pt-5 text-sm">
               <h3 className="text-xl font-semibold">Your brief</h3>
               <p>
                 <strong>{fullName || "You"}</strong>
@@ -345,7 +345,7 @@ export function TopicsStep({
     <section className="space-y-5">
       <div className="flex items-end justify-between gap-4">
         <h1 className="text-4xl font-semibold">Topics</h1>
-        <span className="shrink-0 rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground">
+        <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-link">
           {topics.length} of {MAX_TOPICS} chosen
         </span>
       </div>
@@ -406,12 +406,12 @@ export function TopicsStep({
           {topics
             .filter((t) => t.custom)
             .map((t) => (
-              <span key={t.key} className="inline-flex items-center gap-1 rounded-full border border-primary px-3 py-1 text-sm">
+              <span key={t.key} className="inline-flex items-center gap-1 rounded-full border border-foreground bg-foreground px-3 py-1 text-sm font-semibold text-background">
                 {t.name}
                 <button
                   aria-label={`Remove ${t.name}`}
                   onClick={() => setTopics((p) => p.filter((x) => x.key !== t.key))}
-                  className="text-muted-foreground hover:text-destructive"
+                  className="text-background/70 hover:text-background"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>

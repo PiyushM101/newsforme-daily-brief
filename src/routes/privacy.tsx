@@ -22,7 +22,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-10">
       <h2 className="text-2xl font-semibold">{title}</h2>
-      <div className="mt-3 space-y-3 leading-relaxed text-foreground/90">{children}</div>
+      <div className="mt-3 space-y-3 font-serif text-[18px] leading-relaxed text-foreground/90">{children}</div>
     </section>
   );
 }
@@ -30,10 +30,10 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function Privacy() {
   return (
     <article className="mx-auto max-w-2xl px-5 py-12">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Privacy</p>
-      <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">Your data, in plain words</h1>
+      <p className="text-sm font-semibold text-link">Privacy</p>
+      <h1 className="mt-2 text-4xl sm:text-5xl">Your data, in plain words</h1>
       <p className="mt-4 text-muted-foreground">Last updated {UPDATED}.</p>
-      <p className="mt-6 leading-relaxed">
+      <p className="mt-6 font-serif text-[18px] leading-relaxed">
         NewsForMe sends you a short news email each day. To do that, we keep a small amount of
         information about you. This page says what we keep, why, and how to remove it.
       </p>
@@ -94,7 +94,7 @@ function Privacy() {
         <ul className="list-disc space-y-2 pl-5">
           <li>
             <strong>Stop emails:</strong> use the Unsubscribe link at the bottom of any brief. You
-            can also pause in <Link to="/settings" className="underline hover:text-primary">settings</Link>.
+            can also pause in <Link to="/settings" className="text-link underline underline-offset-2">settings</Link>.
           </li>
           <li>
             <strong>Change your details:</strong> edit your profile, topics, sources, or time in
@@ -102,7 +102,7 @@ function Privacy() {
           </li>
           <li>
             <strong>Delete everything:</strong> use "Delete my account" at the bottom of{" "}
-            <Link to="/settings" className="underline hover:text-primary">settings</Link>. It removes your
+            <Link to="/settings" className="text-link underline underline-offset-2">settings</Link>. It removes your
             account and all your data from our database right away.
           </li>
           <li>
@@ -135,7 +135,7 @@ function Privacy() {
         <p>
           If we change this page in a way that matters, we will tell you by email before it takes
           effect. Questions? Write to{" "}
-          <a href={`mailto:${CONTACT}`} className="underline hover:text-primary">
+          <a href={`mailto:${CONTACT}`} className="text-link underline underline-offset-2">
             {CONTACT}
           </a>
           .
