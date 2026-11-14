@@ -15,9 +15,9 @@ export function useSignedIn() {
 export function SiteHeader() {
   const signedIn = useSignedIn();
   return (
-    <header className="border-b border-border">
+    <header className="border-b-[3px] border-double border-rule">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
-        <Link to="/" className="font-display text-2xl font-bold tracking-tight text-foreground">
+        <Link to="/" className="font-display text-2xl font-bold text-foreground sm:text-3xl">
           NewsForMe
         </Link>
         {signedIn === null ? null : signedIn ? (
