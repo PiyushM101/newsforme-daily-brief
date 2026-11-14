@@ -39,6 +39,8 @@ export function SiteHeader() {
         {signedIn === null ? null : signedIn ? (
           <Link to="/settings" className="text-sm font-semibold text-foreground hover:text-link">
             Settings
+          <Link to="/settings" className="text-sm font-medium text-foreground hover:text-primary">
+            Profile
           </Link>
         ) : (
           <div className="flex items-center gap-4">
