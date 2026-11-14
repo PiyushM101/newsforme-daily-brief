@@ -47,7 +47,7 @@ export function PersonaForm({ value, onChange }: { value: Answers; onChange: (a:
             />
             <div className="text-right text-xs text-muted-foreground">{value.extra.length} / {MAX_EXTRA}</div>
           </div>
-          <div className="rounded-lg border border-dashed border-border bg-muted/40 p-4 text-sm">
+          <div className="rounded-xl border border-border bg-muted/60 p-4 text-sm">
             <div className="font-semibold">Here is what we will use</div>
             {summaryRole && <p className="mt-1">{summaryRole}</p>}
             <pre className="mt-2 whitespace-pre-wrap font-sans text-muted-foreground">
@@ -144,7 +144,7 @@ function MultiPick({ label, def, value, onChange }: { label: string; def: FieldD
               onClick={() => toggle(o)}
               className={cn(
                 "rounded-full border px-3 py-1 text-sm transition-colors",
-                on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-foreground/40",
+                on ? "border-foreground bg-foreground font-semibold text-background" : "border-border bg-card hover:border-foreground/40",
               )}
             >
               {o}
@@ -152,7 +152,7 @@ function MultiPick({ label, def, value, onChange }: { label: string; def: FieldD
           );
         })}
         {custom.map((c) => (
-          <span key={c} className="inline-flex items-center gap-1 rounded-full border border-primary bg-primary px-3 py-1 text-sm text-primary-foreground">
+          <span key={c} className="inline-flex items-center gap-1 rounded-full border border-foreground bg-foreground px-3 py-1 text-sm font-semibold text-background">
             {c}
             <button type="button" aria-label={`Remove ${c}`} onClick={() => onChange(value.filter((x) => x !== c))}>
               <X className="h-3.5 w-3.5" />
