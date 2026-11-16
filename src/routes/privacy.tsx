@@ -97,7 +97,7 @@ function Privacy() {
             can also pause in <Link to="/settings" className="text-link underline underline-offset-2">your profile</Link>.
           </li>
           <li>
-            <strong>Change your details:</strong> edit your profile, topics, sources, or time in
+            <strong>Change your details:</strong> edit your topics, sources, or delivery time in
             your profile at any time.
           </li>
           <li>
