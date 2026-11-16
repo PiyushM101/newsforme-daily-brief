@@ -188,7 +188,7 @@ function Onboarding() {
           .
         </p>
         <Button asChild className="mt-8" size="lg">
-          <Link to="/settings">Go to settings</Link>
+          <Link to="/settings">Go to Profile</Link>
         </Button>
       </div>
     );
