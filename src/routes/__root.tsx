@@ -17,8 +17,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { supabase } from "@/lib/supabase";
 
-const posthogToken = import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN;
-const posthogHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
+const posthogToken = import.meta.env["VITE_PUBLIC_POSTHOG_PROJECT_TOKEN"];
+const posthogHost = import.meta.env["VITE_PUBLIC_POSTHOG_HOST"];
 const posthogConfig =
   posthogToken && posthogHost ? { token: posthogToken, host: posthogHost } : null;
 
@@ -168,7 +168,7 @@ function PostHogIdentity() {
         if (identifiedUserId.current) posthog.reset();
         identifiedUserId.current = user.id;
 
-        const fullName = user.user_metadata.full_name;
+        const fullName = user.user_metadata["full_name"];
         posthog.identify(user.id, {
           email: user.email,
           ...(typeof fullName === "string" ? { name: fullName } : {}),
