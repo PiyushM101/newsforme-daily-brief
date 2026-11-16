@@ -1,3 +1,4 @@
+import type { LogAttributes } from "posthog-js";
 import { DEMO_URL, SUGGEST_URL, supabase } from "./supabase";
 
 export type DraftTopic = {
@@ -14,8 +15,8 @@ type AiCaptureClient = {
   capture: (event: string, properties?: Record<string, unknown>) => unknown;
   get_session_id?: () => string | undefined;
   logger?: {
-    info: (message: string, attributes?: Record<string, unknown>) => unknown;
-    warn: (message: string, attributes?: Record<string, unknown>) => unknown;
+    info: (message: string, attributes?: LogAttributes) => unknown;
+    warn: (message: string, attributes?: LogAttributes) => unknown;
   };
 };
 
