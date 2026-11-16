@@ -194,7 +194,7 @@ function Settings() {
       </div>
 
       <fieldset disabled={saving} aria-busy={saving} className="min-w-0 space-y-6">
-      <Section id="profile" title="Profile">
+      <Section id="profile" title="Your details">
         <div className="space-y-2"><Label htmlFor="n">Full name</Label><Input id="n" maxLength={100} value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
         {!answers.persona && about.trim() && (
           <p className="rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
