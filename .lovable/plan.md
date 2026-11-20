@@ -1,20 +1,31 @@
-# Signed-in homepage: replace the signup boxes
+# Signed-in homepage: two tabs
 
-## What changes
-When someone is already signed in, both email signup boxes on the homepage (top and "Ready for a calmer morning?" at the bottom) are replaced with:
+## What signed-in visitors see
+The email signup boxes are hidden. In their place, two tabs:
 
-- Top: "Welcome back." + a short line "Your briefing arrives every morning." + an orange **Go to Profile** button.
-- Bottom: heading "Want different stories?" + line "Change your topics, sources or delivery time any time." + **Edit my profile** button.
+1. **Today's top news** (open by default): the "worth the read" stories from the latest brief sent to that person. Each story shows its topic, headline, a short summary and a "Read" link to the source. Above them, the date it was sent. If nothing has been sent yet: "Your first brief is on its way. Your top stories will show here."
+2. **My News Map**: shows a lock and "Coming soon". It can't be opened.
 
-Signed-out visitors see exactly what they see today.
+Signed-out visitors see the homepage exactly as it is today.
+
+## What you need to do (outside this app)
+1. **Supabase, one time:** run one short line in the SQL editor that adds a "top stories" column to the existing briefings table. No new tables. I'll give you the exact line.
+2. **n8n:** when it saves a sent brief, also save the "worth the read" stories into that column, in this shape:
+   `[{ "topic": "AI", "title": "...", "summary": "...", "url": "https://..." }]`
+   It uses stories Perplexity already returned, so it adds **no extra Perplexity calls**. Storage is a few KB per email.
+
+Until n8n starts saving stories, the tab shows the "on its way" message.
 
 ## Cost
-Zero extra Perplexity or storage cost. It only checks the sign-in already stored in the browser (the same check the header uses). No new database reads, no AI calls.
+- Perplexity: no change.
+- Storage: tiny (text only, roughly 2 to 5 KB per brief).
+- The homepage reads only the single latest sent brief for the signed-in person.
 
 ## Workflow
-Done in a draft, then a PR against main for your review (per your rule).
+I'll do it in a draft, then open a PR against main for you to review.
 
 ## Technical details
-- In src/routes/index.tsx, use the existing `useSignedIn()` from site-chrome.tsx.
-- New small `SignupOrWelcome` component: `null` (still checking) renders the form-height placeholder to avoid a flash; `true` renders the welcome block linking to /settings; `false` renders `MagicLinkForm`.
-- Hide the "We will email you a code" helper text when signed in.
+- SQL: `alter table public.briefings add column top_stories jsonb;`. Existing RLS (owner can read their own rows) already covers it.
+- src/lib/api.ts: `getLatestStories()` selects `created_at, top_stories` from briefings where status='sent' and kind='daily', ordered by created_at desc, limit 1. It validates the JSON shape and skips bad items.
+- src/routes/index.tsx: uses `useSignedIn()`. If signed in, render a new `SignedInHome` (shadcn Tabs, the second tab disabled with a Lock icon and a "Coming soon" badge) in place of both MagicLinkForm sections. Loading state is a skeleton.
+- Tests: the JSON parser keeps valid items and drops malformed ones.
