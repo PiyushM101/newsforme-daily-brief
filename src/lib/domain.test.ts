@@ -31,18 +31,18 @@ describe("parseTopStories", () => {
   });
   it("keeps stories with a title and drops the rest", () => {
     const stories = parseTopStories([
-      { topic: "AI", title: "New rules for AI models", summary: "What changed.", url: "https://reuters.com/a" },
+      { topic: "AI", title: "New rules for AI models", summary: "What changed.", url: "https://reuters.com/a", why_it_matters: "It sets the rules your product must follow." },
       { topic: "Fintech", title: "   ", summary: "No title." },
       "not an object",
     ]);
     expect(stories).toEqual([
-      { topic: "AI", title: "New rules for AI models", summary: "What changed.", url: "https://reuters.com/a" },
+      { topic: "AI", title: "New rules for AI models", summary: "What changed.", url: "https://reuters.com/a", why_it_matters: "It sets the rules your product must follow." },
     ]);
   });
   it("fills missing fields with empty strings and caps at 10 stories", () => {
     const stories = parseTopStories(Array.from({ length: 12 }, (_, i) => ({ title: `Story ${i + 1}` })));
     expect(stories).toHaveLength(10);
-    expect(stories[0]).toEqual({ topic: "", title: "Story 1", summary: "", url: "" });
+    expect(stories[0]).toEqual({ topic: "", title: "Story 1", summary: "", url: "", why_it_matters: "" });
   });
 });
 
