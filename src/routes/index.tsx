@@ -110,9 +110,27 @@ function SampleEmail() {
     { h: "Card fees face a fresh challenge", p: "Merchants filed a new case over swipe fees.", w: "A ruling could reshape how fintechs price payments.", src: "AP" },
     { h: "Early stage deals pick up again", p: "Seed rounds grew for a third month. Most went to AI tools.", w: "Hiring at young startups usually follows funding by a quarter.", src: "TechCrunch" },
   ];
-  const topics = [
-    { t: "AI", items: [{ h: "Open model tops coding benchmark", p: "A new open release matched leading paid models on code tasks.", src: "The Verge" }] },
-    { t: "Fintech", items: [] as { h: string; p: string; src: string }[] },
+  type Item = { h: string; p: string; w: string; src: string };
+  const topics: { t: string; items: Item[] }[] = [
+    {
+      t: "Enterprise AI ROI",
+      items: [
+        { h: "Survey: 1 in 4 AI pilots now pay for themselves", p: "Big companies report the clearest savings in support and finance teams.", w: "Budget owners will ask for payback numbers before approving new AI spend.", src: "Wall Street Journal" },
+        { h: "Bank cuts AI costs by switching to smaller models", p: "Moving routine tasks to cheaper models halved its monthly bill.", w: "Model choice is becoming a cost lever, not just a quality one.", src: "Bloomberg" },
+      ],
+    },
+    {
+      t: "Agentic Commerce",
+      items: [
+        { h: "Card networks test payments made by AI agents", p: "Shoppers can let an assistant buy within set limits and stores.", w: "Checkout may move from websites into chat assistants.", src: "Reuters" },
+      ],
+    },
+    {
+      t: "Visa Immigration Updates",
+      items: [
+        { h: "Work visa lottery results go out next month", p: "Officials confirmed the timeline and a new online status page.", w: "Applicants and employers should plan start dates around the release.", src: "AP" },
+      ],
+    },
   ];
   const Why = ({ children }: { children: string }) => (
     <div className="mt-2 rounded-r border-l-[3px] border-primary bg-muted px-3 py-2">
@@ -153,7 +171,8 @@ function SampleEmail() {
                   <li key={i.h}>
                     <span className="font-semibold underline decoration-primary underline-offset-2">{i.h}</span>
                     <p className="text-[15px] text-foreground/80">{i.p}</p>
-                    <div className="text-xs text-muted-foreground">{i.src}</div>
+                    <Why>{i.w}</Why>
+                    <div className="mt-1 text-xs text-muted-foreground">{i.src}</div>
                   </li>
                 ))}
               </ul>
