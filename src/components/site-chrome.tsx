@@ -51,7 +51,7 @@ export function SiteHeader() {
             </Link>
             <Link
               to="/settings"
-              className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
+              className="text-sm font-semibold text-muted-foreground underline decoration-primary decoration-2 underline-offset-4 transition-colors hover:text-foreground"
             >
               Profile
             </Link>
