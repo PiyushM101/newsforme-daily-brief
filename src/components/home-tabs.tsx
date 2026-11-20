@@ -68,6 +68,12 @@ export function HomeTabs() {
                     {s.summary ? (
                       <p className="mt-1 font-serif text-[17px] leading-relaxed text-foreground/85">{s.summary}</p>
                     ) : null}
+                    {s.why_it_matters ? (
+                      <p className="mt-2 font-serif text-[15px] leading-relaxed text-muted-foreground">
+                        <span className="font-sans text-xs font-bold uppercase tracking-wide text-link">Why it matters: </span>
+                        {s.why_it_matters}
+                      </p>
+                    ) : null}
                   </article>
                 ))}
               </div>
