@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HomeTabs } from "@/components/home-tabs";
 import { MagicLinkForm } from "@/components/magic-link-form";
-import { LogoMark } from "@/components/site-chrome";
+import { LogoMark, useSignedIn } from "@/components/site-chrome";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/")({
@@ -33,6 +34,7 @@ const faqs = [
 ];
 
 function Landing() {
+  const signedIn = useSignedIn();
   return (
     <div className="mx-auto max-w-5xl px-5">
       <section className="flex flex-col gap-14 py-14 md:py-20">
@@ -44,14 +46,20 @@ function Landing() {
           <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground">
             One short email a day. Only the stories that matter to you. Set it up in two minutes.
           </p>
-          <div className="mx-auto mt-8 max-w-md text-left">
-            <MagicLinkForm cta="Get started" />
-            <p className="mt-2 text-center text-xs text-muted-foreground">We will email you a code. No password.</p>
+          {signedIn ? null : (
+            <div className="mx-auto mt-8 max-w-md text-left">
+              <MagicLinkForm cta="Get started" />
+              <p className="mt-2 text-center text-xs text-muted-foreground">We will email you a code. No password.</p>
+            </div>
+          )}
+        </div>
+        {signedIn ? (
+          <HomeTabs />
+        ) : (
+          <div className="mx-auto w-full max-w-xl">
+            <SampleEmail />
           </div>
-        </div>
-        <div className="mx-auto w-full max-w-xl">
-          <SampleEmail />
-        </div>
+        )}
       </section>
 
       <section className="border-t border-border py-14">
@@ -81,15 +89,17 @@ function Landing() {
         </Accordion>
       </section>
 
-      <section className="border-t border-border py-16 text-center">
-        <h2 className="text-3xl md:text-4xl">Ready for a calmer morning?</h2>
-        <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-          Enter your email and we will send you a sign-in link. No password needed.
-        </p>
-        <div className="mx-auto mt-6 max-w-md">
-          <MagicLinkForm cta="Get started" />
-        </div>
-      </section>
+      {signedIn ? null : (
+        <section className="border-t border-border py-16 text-center">
+          <h2 className="text-3xl md:text-4xl">Ready for a calmer morning?</h2>
+          <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+            Enter your email and we will send you a sign-in link. No password needed.
+          </p>
+          <div className="mx-auto mt-6 max-w-md">
+            <MagicLinkForm cta="Get started" />
+          </div>
+        </section>
+      )}
     </div>
   );
 }
