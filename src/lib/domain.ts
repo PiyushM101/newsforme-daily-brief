@@ -49,7 +49,7 @@ export function firstBriefing(sendHour: number, timeZone: string, now = new Date
   return { date: next, day };
 }
 
-export type TopStory = { topic: string; title: string; summary: string; url: string };
+export type TopStory = { topic: string; title: string; summary: string; url: string; why_it_matters: string };
 
 export const MAX_TOP_STORIES = 10;
 
@@ -67,6 +67,7 @@ export function parseTopStories(raw: unknown): TopStory[] {
       title,
       summary: String(o["summary"] ?? "").trim().slice(0, 600),
       url: String(o["url"] ?? "").trim().slice(0, 500),
+      why_it_matters: String(o["why_it_matters"] ?? "").trim().slice(0, 600),
     });
     if (stories.length >= MAX_TOP_STORIES) break;
   }
